@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Form Validation</title>
+  <style>
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>Form Validation Example</h1>
+  <form id="myForm" onsubmit="validateForm(event)">
+    <div>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required>
+    </div>
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+    </div>
+    <div>
+      <label for="phone">Phone Number:</label>
+      <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required>
+    </div>
+    <div>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" minlength="6" required>
+    </div>
+    <div>
+      <label for="age">Age:</label>
+      <input type="number" id="age" name="age" min="1" max="120" required>
+    </div>
+    <div>
+      <label for="gender">Gender:</label>
+      <select id="gender" name="gender" required>
+        <option value="">Select</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
+    </div>
+    <div>
+      <label for="dob">Date of Birth:</label>
+      <input type="date" id="dob" name="dob" required>
+    </div>
+    <div>
+      <label for="color">Favorite Color:</label>
+      <input type="color" id="color" name="color" required>
+    </div>
+    <div>
+      <input type="submit" value="Submit">
+    </div>
+  </form>
+
+  <script>
+    function validateForm(event) {
+      event.preventDefault(); // Prevent form submission
+
+      // Fetch form inputs
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+      const password = document.getElementById('password').value;
+      const age = document.getElementById('age').value;
+      const gender = document.getElementById('gender').value;
+      const dob = document.getElementById('dob').value;
+      const color = document.getElementById('color').value;
+
+      // Perform validation
+      const errors = [];
+
+      if (!name.trim()) {
+        errors.push('Name is required');
+      }
+
+      if (!email.trim()) {
+        errors.push('Email is required');
+      } else if (!isValidEmail(email)) {
+        errors.push('Email is invalid');
+      }
+
+      if (!phone.trim()) {
+        errors.push('Phone number is required');
+      } else if (!isValidPhoneNumber(phone)) {
+        errors.push('Phone number is invalid');
+      }
+
+      if (!password.trim()) {
+        errors.push('Password is required');
+      } else if (password.length < 6) {
+        errors.push('Password should be at least 6 characters long');
+      }
+
+      if (!age.trim()) {
+        errors.push('Age is required');
+      } else if (isNaN(age) || age <= 0 || age > 120) {
+        errors.push('Age is invalid');
+      }
+
+      if (!gender) {
+        errors.push('Gender is required');
+      }
+
+      if (!dob) {
+        errors.push('Date of Birth is required');
+      }
+
+      if (!color) {
+        errors.push('Favorite color is required');
+      }
+
+      // Display errors or submit the form
+      const errorContainer = document.getElementById('errorContainer');
+      errorContainer.innerHTML = '';
+
+      if (errors.length > 0) {
+        const errorList = document.createElement('ul');
+        errors.forEach((error) => {
+          const li = document.createElement('li');
+          li.textContent = error;
+          errorList.appendChild(li);
+        });
+        errorContainer.appendChild(errorList);
+      } else {
+        document.getElementById('myForm').submit();
+      }
+    }
+
+    function isValidEmail(email) {
+      // Basic email validation using regex
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
+
+    function isValidPhoneNumber(phone) {
+      // Basic phone number validation using regex
+      const phoneRegex = /^[0-9]{10}$/;
+      return phoneRegex.test(phone);
+    }
+  </script>
+</body>
+</html>
